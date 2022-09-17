@@ -5,7 +5,7 @@ import org.springframework.aop.support.DefaultPointcutAdvisor;
 
 public class PointcutAPIDemo {
     public static void main(String[] args) {
-        EchoServicePointCut servicePointCut = new EchoServicePointCut("echo", EchoService.class);
+        var servicePointCut = EchoServiceEchoMethodPointCut.INSTANCE;
         DefaultPointcutAdvisor advisor =
             new DefaultPointcutAdvisor(servicePointCut, new EchoServiceMethodInterceptor());
         DefaultEchoService echoService = new DefaultEchoService();
