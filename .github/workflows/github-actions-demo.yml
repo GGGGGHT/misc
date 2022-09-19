@@ -1,28 +1,23 @@
 name: build 
 
-on:
-  push:
-    branches: main
-  pull_request:
-    branches: main
+on: [push, pull_request]
     
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout project sources
-      - uses: actions/checkout@v2
-      
-      - name: Setup Java JDK
-        uses: actions/setup-java@v3.5.0
-        with:
-          # The Java version to set up. Takes a whole or semver Java version. See examples of supported syntax in README file
-          java-version: 17
-          # Java distribution. See the list of supported distributions in README file
-          distribution: jdk
-          
-      - name: Gradle Build Action
-        uses: gradle/gradle-build-action@v2.3.0
-      - name: Run build with Gradle Wrapper
-        run: ./gradlew build
+    - name: Checkout project sources
+    - uses: actions/checkout@v2
+
+    - name: Setup Java JDK
+      uses: actions/setup-java@v3.5.0
+      with:
+        # The Java version to set up. Takes a whole or semver Java version. See examples of supported syntax in README file
+        java-version: 17
+        # Java distribution. See the list of supported distributions in README file
+        distribution: jdk
+
+    - name: Gradle Build Action
+      uses: gradle/gradle-build-action@v2.3.0
+    - name: Run build with Gradle Wrapper
+      run: ./gradlew build
