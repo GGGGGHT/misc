@@ -1,4 +1,4 @@
-# learn java use jdk17 
+# learn java use jdk 
 
 
 
@@ -39,3 +39,10 @@ public class Pid {
  }
 }
 ```
+
+## Virtual Threads: New Foundations for High-Scale Java Applications
+1. 虚拟线程是Java线程轻量级的实现，做为预览功能在jdk19中被交付
+2. 虚拟线程极大地减少了编写、维护和观察高吞吐量并发应用程序的工作量。
+3. 虚拟线程为熟悉 `thread-per-request` 编程风格注入了新的活力，使其能够以接近最佳的硬件利用率进行扩展。
+4. 虚拟线程与现有的 Thread API 完全兼容，因此现有的应用程序和库可以通过最小的更改来支持它们。
+5. 虚拟线程支持现有的调试和分析接口，可以使用现有工具和技术轻松地对虚拟线程进行故障排除、调试和分析。
