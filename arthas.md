@@ -34,6 +34,8 @@ Java 应用诊断利器
 
 
 ## misc
+
+### ongl demo 
 ```java
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -133,7 +135,35 @@ enum Type {
 
 ```
 
+### Web console config[^4]
+1. 下载部署 [arthas tunnel server](https://github.com/alibaba/arthas/releases/download/arthas-all-3.6.7/arthas-tunnel-server-3.6.7-fatjar.jar)
+2. 启动 java -jar !$
+3. 默认情况下，arthas tunnel server 的 web 端口是8080，arthas agent 连接的端口是7777。 启动之后，可以访问 http://127.0.0.1:8080/ ，再通过agentId连接到已注册的 arthas agent 上。
+4. 启动 arthas 时连接到 tunnel server 
+    - as.sh --tunnel-server 'ws://127.0.0.1:7777/ws'
+    - java -jar arthas-boot.jar --tunnel-server 'ws://127.0.0.1:7777/ws'
+    - 项目启动直接attach
+
+       ```pom
+        <dependency>
+            <groupId>com.taobao.arthas</groupId>
+            <artifactId>arthas-spring-boot-starter</artifactId>
+            <version> 3.6.7</version>
+        </dependency>
+        ```
+        ```
+        implementation 'com.taobao.arthas:arthas-spring-boot-starter:3.6.7'
+        ```
+
+
+    ![image](https://user-images.githubusercontent.com/26846402/211205802-873eda38-6147-44ce-b8a5-95e0d424c918.png)
+
+
+
 ## See Also
 [^1]: https://commons.apache.org/proper/commons-ognl/
 [^2]: https://arthas.aliyun.com
 [^3]: https://arthas.aliyun.com/doc/commands.html
+[^4]: https://arthas.aliyun.com/doc/tunnel.html
+
+
