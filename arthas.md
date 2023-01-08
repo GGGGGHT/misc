@@ -9,3 +9,12 @@ Java 应用诊断利器
 - retransform 在线热更新
 - trace 方法内部调用路径，并输出方法路径上的每个节点上耗时
 - WebConsole 在线诊断，点开网页诊断线上应用 需要额外配置
+
+
+## ognl 
+
+
+## profiler 
+
+
+## misc
