@@ -137,28 +137,46 @@ enum Type {
 
 ### Web console config[^4]
 1. 下载部署 [arthas tunnel server](https://github.com/alibaba/arthas/releases/download/arthas-all-3.6.7/arthas-tunnel-server-3.6.7-fatjar.jar)
-2. 启动 java -jar !$
-3. 默认情况下，arthas tunnel server 的 web 端口是8080，arthas agent 连接的端口是7777。 启动之后，可以访问 http://127.0.0.1:8080/ ，再通过agentId连接到已注册的 arthas agent 上。
+2. 启动fatjar java -Darthas.enable-detail-pages=true -Dserver.port=9090 -jar arthas-tunnel-server-3.6.7-fatjar.jar
+3. 默认情况下，arthas tunnel server 的 web 端口是8080，arthas agent 连接的端口是7777。 启动之后，可以访问 http://127.0.0.1:8080/ ，再通过agentId连接到已注册的 arthas agent 上。通过http://localhost:9090/apps.html可以查看到所有的已经注册的服务.
 4. 启动 arthas 时连接到 tunnel server 
-    - as.sh --tunnel-server 'ws://127.0.0.1:7777/ws'
-    - java -jar arthas-boot.jar --tunnel-server 'ws://127.0.0.1:7777/ws'
-    - 项目启动直接attach
 
-       ```pom
-        <dependency>
-            <groupId>com.taobao.arthas</groupId>
-            <artifactId>arthas-spring-boot-starter</artifactId>
-            <version> 3.6.7</version>
-        </dependency>
-        ```
-        ```
-        implementation 'com.taobao.arthas:arthas-spring-boot-starter:3.6.7'
-        ```
+    1. shell
+    ```sh
+    as.sh --tunnel-server 'ws://127.0.0.1:7777/ws' --app-name xxx
+    ```
+    2. use jar 
+    ```sh
+    java -jar arthas-boot.jar --tunnel-server 'ws://127.0.0.1:7777/ws' --app-name xxx
+    ```
+    3. 项目启动直接attach
 
+   ```pom
+    <dependency>
+        <groupId>com.taobao.arthas</groupId>
+        <artifactId>arthas-spring-boot-starter</artifactId>
+        <version> 3.6.7</version>
+    </dependency>
+    ```
+    ```
+    implementation 'com.taobao.arthas:arthas-spring-boot-starter:3.6.7'
+    ```
+    ```
+    
+    arthas.agent-id=spring-boot-3-demo
+    arthas.tunnel-server=ws://localhost:7777/ws
+    arthas.telnet-port=${random.int(10000,15000)}
+    arthas.http-port=${random.int(10000,15000)}
+    server.port=8888
+    ```
+
+    ![image](https://user-images.githubusercontent.com/26846402/211269126-28b25fb7-af71-462a-89ae-6443b33fb7cf.png)
 
     ![image](https://user-images.githubusercontent.com/26846402/211205802-873eda38-6147-44ce-b8a5-95e0d424c918.png)
 
 
+### idea plugin 
+[idea-plugin](https://plugins.jetbrains.com/plugin/13581-arthas-idea)
 
 ## See Also
 [^1]: https://commons.apache.org/proper/commons-ognl/
