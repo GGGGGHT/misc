@@ -11,6 +11,13 @@ Java 应用诊断利器
 
 ## command[^3]
 
+#### watch 
+
+<table><thead><tr><th style="text-align:right;">参数名称</th><th style="text-align:left;">参数说明</th></tr></thead><tbody><tr><td style="text-align:right;"><em>class-pattern</em></td><td style="text-align:left;">类名表达式匹配</td></tr><tr><td style="text-align:right;"><em>method-pattern</em></td><td style="text-align:left;">函数名表达式匹配</td></tr><tr><td style="text-align:right;"><em>express</em></td><td style="text-align:left;">观察表达式，默认值：<code>{params, target, returnObj}</code></td></tr><tr><td style="text-align:right;"><em>condition-express</em></td><td style="text-align:left;">条件表达式</td></tr><tr><td style="text-align:right;">[b]</td><td style="text-align:left;">在<strong>函数调用之前</strong>观察</td></tr><tr><td style="text-align:right;">[e]</td><td style="text-align:left;">在<strong>函数异常之后</strong>观察</td></tr><tr><td style="text-align:right;">[s]</td><td style="text-align:left;">在<strong>函数返回之后</strong>观察</td></tr><tr><td style="text-align:right;">[f]</td><td style="text-align:left;">在<strong>函数结束之后</strong>(正常返回和异常返回)观察</td></tr><tr><td style="text-align:right;">[E]</td><td style="text-align:left;">开启正则表达式匹配，默认为通配符匹配</td></tr><tr><td style="text-align:right;">[x:]</td><td style="text-align:left;">指定输出结果的属性遍历深度，默认为 1，最大值是 4</td></tr>
+    <tr><td style="text-align:right;">[n]</td><td style="text-align:left;">指定观察的次数 e.g. -n 1 表示只输出一次 </td></tr>
+    </tbody></table>
+
+
 ### 表达式核心变量
 
 
@@ -26,6 +33,37 @@ Java 应用诊断利器
 |isBefore|	辅助判断标记，当前的通知节点有可能是在方法一开始就通知，此时 isBefore==true 成立，同时 isThrow==false 和 isReturn==false，因为在方法刚开始时，还无法确定方法调用将会如何结束。|
 |isThrow	|辅助判断标记，当前的方法调用以抛异常的形式结束。|
 |isReturn	|辅助判断标记，当前的方法调用以正常返回的形式结束。|
+
+1. 查看第一个参数 watch Test test params[0] -n 1
+2. 查看第一个参数(集合)中的第一个元素 
+    - watch Test test params[0][0] -n 1
+    - watch Test test params[0].get(0) -n 1
+3. 查看第一个参数(集合)中第一个元素的属性 
+    - watch Test test params[0].get(0).age -n 1
+    - watch Test test **'** params[0][0]["age"] **'** -n 1
+
+4. 获取所有的name  watch Test test params[0].{name} -n 1
+5. 集合过滤
+    - 过滤所有的age大于5的name watch Test test "params[0].{? #this.age > 5}.{name}" -n 1 
+       > 其中{? #this.age > 5} 相当于stream里面的filter，后面的name相当于stream里面的map
+
+    - 找到第一个age大于5的Pojo的name watch Test test "params[0].{^ #this.age > 5}.{name}" -n 1
+    - 找到最后一个age大于5的Pojo的name watch Test test "params[0].{$ #this.age > 5}.{name}" -n 1
+
+6. 多行表达式
+    - 需要取所有的name 并在结果中增加一个新的值 并返回　watch Test test '(#test=params[0].{name}, #test.add("abc"), #test)' -n 1
+    - 需要取所有的age 返回三个集合　一个中是所有的年龄　一个中是基数　另一个是偶数　watch Test test '#ages=test.params[0].{age}, #odd=new java.util.HashSet(), #even = new java.util.HashSet(), #odd.addAll(#ages.{? #this % 2 != 0}) #even.addAll(#ages.{? #this % 2 == 0}), {#ages, #odd, #even}' -n 1
+        
+
+7. 访问静态变量 
+    - watch  Test test '@Test@m' -n 1
+    - ognl '@Test@m' -n 1
+    - getstatic Test m 
+   > 可以通过`@class@filed`方式访问，需要填写全类名
+
+8. 调用静态方法
+    - watch Test test '@java.lang.System@getProperty("java.version")' -n 1
+    - ognl '@java.lang.System@getProperty("java.version")' -n 1
 
 ## ognl[^1]
 
