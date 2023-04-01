@@ -46,3 +46,16 @@ public class Pid {
 3. 虚拟线程为熟悉 `thread-per-request` 编程风格注入了新的活力，使其能够以接近最佳的硬件利用率进行扩展。
 4. 虚拟线程与现有的 Thread API 完全兼容，因此现有的应用程序和库可以通过最小的更改来支持它们。
 5. 虚拟线程支持现有的调试和分析接口，可以使用现有工具和技术轻松地对虚拟线程进行故障排除、调试和分析。
+
+## Java 泛型通配符使用
+- An "in" variable is defined with an upper bounded wildcard, using the extends keyword. 
+- An "out" variable is defined with a lower bounded wildcard, using the super keyword.
+- In the case where the "in" variable can be accessed using methods defined in the Object class, use an unbounded wildcard.
+- In the case where the code needs to access the variable as both an "in" and an "out" variable, do not use a wildcard.
+
+`pecs`即生产者使用extend,消费者使用super. 生产者可以看做只读.[^1]
+
+
+
+---
+[^1]: https://dev.java/learn/generics/wildcards/#:~:text=of%20Double%20values.-,Guidelines%20for%20Wildcard%20Use,-One%20of%20the
