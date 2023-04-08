@@ -56,6 +56,147 @@ public class Pid {
 `pecs`即生产者使用extend,消费者使用super. 生产者可以看做只读.[^1]
 
 
+## NMT (Native Memory Tracking)
 
+enable native memory tracking `-XX:NativeMemoryTracking=summary` or `-XX:NativeMemoryTracking=detail`.
+```sh
+jcmd pid VM.native_memory baseline
+jcmd pid VM.native_memory detail.diff 
+```
+
+### Native Memory Tracking Memory Categories 
+
+<table cellpadding="4" cellspacing="0" class="Formal" title="Native Memory Tracking Memory Categories" summary="This table describes native memory tracking memory categories" width="100%" frame="hsides" border="1" rules="rows">
+                           <thead>
+                              <tr align="left" valign="top">
+                                 <th align="left" valign="bottom" width="30%" id="d2672e1987">Category</th>
+                                 <th align="left" valign="bottom" width="70%" id="d2672e1990">Description</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr align="left" valign="top">
+                                 <td align="left" valign="top" width="30%" id="d2672e1995" headers="d2672e1987 ">
+                                    <p>Java Heap</p>
+                                 </td>
+                                 <td align="left" valign="top" width="70%" headers="d2672e1995 d2672e1990 ">
+                                    <p>The heap where your objects live</p>
+                                 </td>
+                              </tr>
+                              <tr align="left" valign="top">
+                                 <td align="left" valign="top" width="30%" id="d2672e2002" headers="d2672e1987 ">
+                                    <p>Class</p>
+                                 </td>
+                                 <td align="left" valign="top" width="70%" headers="d2672e2002 d2672e1990 ">
+                                    <p>Class meta data</p>
+                                 </td>
+                              </tr>
+                              <tr align="left" valign="top">
+                                 <td align="left" valign="top" width="30%" id="d2672e2009" headers="d2672e1987 ">
+                                    <p>Thread</p>
+                                 </td>
+                                 <td align="left" valign="top" width="70%" headers="d2672e2009 d2672e1990 ">
+                                    <p>Memory used by threads, including thread data structure, resource area, handle area, and so on</p>
+                                 </td>
+                              </tr>
+                              <tr align="left" valign="top">
+                                 <td align="left" valign="top" width="30%" id="d2672e2016" headers="d2672e1987 ">
+                                    <p>Code</p>
+                                 </td>
+                                 <td align="left" valign="top" width="70%" headers="d2672e2016 d2672e1990 ">
+                                    <p>Generated code</p>
+                                 </td>
+                              </tr>
+                              <tr align="left" valign="top">
+                                 <td align="left" valign="top" width="30%" id="d2672e2023" headers="d2672e1987 ">
+                                    <p>GC</p>
+                                 </td>
+                                 <td align="left" valign="top" width="70%" headers="d2672e2023 d2672e1990 ">
+                                    <p>Data use by the GC, such as card table, except the remembered sets </p>
+                                 </td>
+                              </tr>
+                              <tr align="left" valign="top">
+                                 <td align="left" valign="top" width="30%" id="d2672e2031" headers="d2672e1987 ">
+                                    <p>GCCardSet</p>
+                                 </td>
+                                 <td align="left" valign="top" width="70%" headers="d2672e2031 d2672e1990 ">
+                                    <p>Data use by the GC's remembered sets (optional, G1 only)</p>
+                                 </td>
+                              </tr>
+                              <tr align="left" valign="top">
+                                 <td align="left" valign="top" width="30%" id="d2672e2042" headers="d2672e1987 ">
+                                    <p>Compiler</p>
+                                 </td>
+                                 <td align="left" valign="top" width="70%" headers="d2672e2042 d2672e1990 ">
+                                    <p>Memory tracking used by the compiler when generating code</p>
+                                 </td>
+                              </tr>
+                              <tr align="left" valign="top">
+                                 <td align="left" valign="top" width="30%" id="d2672e2049" headers="d2672e1987 ">
+                                    <p>Internal</p>
+                                 </td>
+                                 <td align="left" valign="top" width="70%" headers="d2672e2049 d2672e1990 ">
+                                    <p>Memory that does not fit the previous categories, such as the memory used by the command line parser, JVMTI, properties, and so on</p>
+                                 </td>
+                              </tr>
+                              <tr align="left" valign="top">
+                                 <td align="left" valign="top" width="30%" id="d2672e2056" headers="d2672e1987 ">
+                                    <p>Other</p>
+                                 </td>
+                                 <td align="left" valign="top" width="70%" headers="d2672e2056 d2672e1990 ">
+                                    <p>Memory not covered by another category</p>
+                                 </td>
+                              </tr>
+                              <tr align="left" valign="top">
+                                 <td align="left" valign="top" width="30%" id="d2672e2063" headers="d2672e1987 ">
+                                    <p>Symbol</p>
+                                 </td>
+                                 <td align="left" valign="top" width="70%" headers="d2672e2063 d2672e1990 ">
+                                    <p>Memory for symbols</p>
+                                 </td>
+                              </tr>
+                              <tr align="left" valign="top">
+                                 <td align="left" valign="top" width="30%" id="d2672e2070" headers="d2672e1987 ">
+                                    <p>Native Memory Tracking</p>
+                                 </td>
+                                 <td align="left" valign="top" width="70%" headers="d2672e2070 d2672e1990 ">
+                                    <p>Memory used by NMT</p>
+                                 </td>
+                              </tr>
+                              <tr align="left" valign="top">
+                                 <td align="left" valign="top" width="30%" id="d2672e2078" headers="d2672e1987 ">
+                                    <p>Arena Chunk</p>
+                                 </td>
+                                 <td align="left" valign="top" width="70%" headers="d2672e2078 d2672e1990 ">
+                                    <p>Memory used by chunks in the arena chunk pool</p>
+                                 </td>
+                              </tr>
+                              <tr align="left" valign="top">
+                                 <td align="left" valign="top" width="30%" id="d2672e2085" headers="d2672e1987 ">
+                                    <p>Logging</p>
+                                 </td>
+                                 <td align="left" valign="top" width="70%" headers="d2672e2085 d2672e1990 ">
+                                    <p>Memory used by logging</p>
+                                 </td>
+                              </tr>
+                              <tr align="left" valign="top">
+                                 <td align="left" valign="top" width="30%" id="d2672e2092" headers="d2672e1987 ">
+                                    <p>Arguments</p>
+                                 </td>
+                                 <td align="left" valign="top" width="70%" headers="d2672e2092 d2672e1990 ">
+                                    <p>Memory for arguments</p>
+                                 </td>
+                              </tr>
+                              <tr align="left" valign="top">
+                                 <td align="left" valign="top" width="30%" id="d2672e2099" headers="d2672e1987 ">
+                                    <p>Module</p>
+                                 </td>
+                                 <td align="left" valign="top" width="70%" headers="d2672e2099 d2672e1990 ">
+                                    <p>Memory used by modules</p>
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                        
+                        
 ---
 [^1]: https://dev.java/learn/generics/wildcards/#:~:text=of%20Double%20values.-,Guidelines%20for%20Wildcard%20Use,-One%20of%20the
